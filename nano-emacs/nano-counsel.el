@@ -32,6 +32,7 @@
                                   (Man-completion-table .     "^")
                                   (woman .                    "^")))
 (global-set-key (kbd "M-x")     'counsel-M-x)
+(global-set-key "\C-s" 'swiper)
 
 
 (global-set-key (kbd "C-c r")   'counsel-recentf)

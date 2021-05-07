@@ -1,6 +1,4 @@
 ;; -*- lexical-binding: t -*-
-(package-initialize)
-
 ;; ---------------- MY CONFIG ----------------------------------------
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -44,6 +42,15 @@ re-downloaded in order to locate PACKAGE."
 
 ;; proof general
 (require-package 'proof-general)
+
+(eval-after-load "proof-script" '(progn
+ (define-key proof-mode-map (kbd "M-n")
+   'proof-assert-next-command-interactive)
+ (define-key proof-mode-map (kbd "<M-return>")
+   'proof-goto-point)
+ (define-key proof-mode-map (kbd "M-p")
+   'proof-undo-last-successful-command)))
+
 ;; ---------------- MY CONFIG ----------------------------------------
 
 ;; Default layout (optional)
