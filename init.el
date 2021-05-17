@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
 ;; ---------------- MY CONFIG ----------------------------------------
-
+(package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;;; On-demand installation of packages
@@ -42,14 +42,32 @@ re-downloaded in order to locate PACKAGE."
 
 ;; proof general
 (require-package 'proof-general)
+(setq proof-splash-enable nil)
+(setq proof-next-command-insert-space nil)
+
+(require-package 'company)
+(require-package 'company-coq)
+(add-hook 'coq-mode-hook #'company-coq-mode)
+(add-hook 'coq-mode-hook (lambda ()
+                           ;; fix broken faces
+                           (set-face-attribute 'coq-solve-tactics-face nil
+                                               :foreground "#00008b")
+                           (define-key company-coq-map (kbd "<C-return>")
+                             'proof-goto-point)
+                           ))
 
 (eval-after-load "proof-script" '(progn
  (define-key proof-mode-map (kbd "M-n")
    'proof-assert-next-command-interactive)
- (define-key proof-mode-map (kbd "<M-return>")
+ (define-key proof-mode-map (kbd "<C-return>")
    'proof-goto-point)
  (define-key proof-mode-map (kbd "M-p")
    'proof-undo-last-successful-command)))
+
+(require-package 'drag-stuff)
+(require 'drag-stuff)
+(drag-stuff-global-mode 1)
+(drag-stuff-define-keys)
 
 ;; ---------------- MY CONFIG ----------------------------------------
 
@@ -88,7 +106,10 @@ re-downloaded in order to locate PACKAGE."
 (nano-faces)
 
 (require 'nano-theme)
+;; (require 'nano-theme-dark)
 (nano-theme)
+;; (nano-theme-set-dark)
+
 
 ;; Nano default settings (optional)
 (require 'nano-defaults)
@@ -116,8 +137,7 @@ re-downloaded in order to locate PACKAGE."
   (message (format "Initialization time: %s" (emacs-init-time))))
 
 ;; Splash (optional)
-(unless (member "-no-splash" command-line-args)
-  (require 'nano-splash))
+(require 'nano-splash)
 
 ;; Help (optional)
 (unless (member "-no-help" command-line-args)
