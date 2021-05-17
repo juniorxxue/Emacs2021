@@ -36,6 +36,8 @@ re-downloaded in order to locate PACKAGE."
 (add-to-list 'load-path "/Users/xuxue/.emacs.d/nano-emacs")
 (add-to-list 'load-path ".")
 
+(setq-default cursor-type 'bar)
+
 ;; counsel
 (require-package 'counsel)
 (require-package 'smex)
@@ -52,17 +54,24 @@ re-downloaded in order to locate PACKAGE."
                            ;; fix broken faces
                            (set-face-attribute 'coq-solve-tactics-face nil
                                                :foreground "#00008b")
-                           (define-key company-coq-map (kbd "<C-return>")
-                             'proof-goto-point)
+                           (setq coq-compile-before-require 't)
                            ))
 
-(eval-after-load "proof-script" '(progn
- (define-key proof-mode-map (kbd "M-n")
-   'proof-assert-next-command-interactive)
- (define-key proof-mode-map (kbd "<C-return>")
-   'proof-goto-point)
- (define-key proof-mode-map (kbd "M-p")
-   'proof-undo-last-successful-command)))
+(eval-after-load "proof-script"
+  '(progn
+     (define-key proof-mode-map (kbd "M-n")
+         'proof-assert-next-command-interactive)
+     (define-key proof-mode-map (kbd "<C-return>")
+       'proof-goto-point)
+     (define-key proof-mode-map (kbd "M-p")
+       'proof-undo-last-successful-command)))
+
+;; advise M-n
+(add-hook 'coq-mode-hook (lambda ()
+                           (advice-add 'proof-assert-next-command-interactive
+                                       :after (lambda (&optional ARG PRED)
+                                                (skip-chars-backward " \t\n")))))
+
 
 (require-package 'drag-stuff)
 (require 'drag-stuff)
