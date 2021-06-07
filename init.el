@@ -48,6 +48,8 @@ re-downloaded in order to locate PACKAGE."
 (setq proof-next-command-insert-space nil)
 
 (require-package 'company)
+
+(setq company-coq-live-on-the-edge t)
 (require-package 'company-coq)
 (add-hook 'coq-mode-hook #'company-coq-mode)
 (add-hook 'coq-mode-hook (lambda ()
@@ -77,6 +79,13 @@ re-downloaded in order to locate PACKAGE."
 (require 'drag-stuff)
 (drag-stuff-global-mode 1)
 (drag-stuff-define-keys)
+
+(require-package 'projectile)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+
 
 ;; ---------------- MY CONFIG ----------------------------------------
 
